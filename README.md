@@ -40,7 +40,7 @@
 
 ## 快速开始
 
-1. 用浏览器打开 [`https://htmlpreview.github.io/?https://github.com/so-for-what/teochew-rhyme-tool-for-poem/blob/main/output/index.html`](https://htmlpreview.github.io/?https://github.com/so-for-what/teochew-rhyme-tool-for-poem/blob/main/output/index.html)（或直接双击文件）
+1. 用浏览器打开 [`https://htmlpreview.github.io/?https://github.com/so-for-what/teochew-rhyme-tool-for-poem/blob/main/output/index.html`](https://htmlpreview.github.io/?https://github.com/so-for-what/teochew-rhyme-tool-for-poem/blob/main/output/index.html)（HTML文件位于output下，其中rhyme_tool_standalone.html直接可用，或者index.html,但是index.html需要与data.js放在同一目录下）
 
 > 如果你想从头重建所有数据，终端运行 `python3 build_all.py` 即可。
 2. 输入一个汉字（如「村」「东」「月」）
