@@ -19,7 +19,6 @@ body{font-family:-apple-system,'Hiragino Sans SC','Noto Sans SC',sans-serif;back
 .sr button:hover{background:#283593}
 .rh{display:inline-block;padding:3px 10px;border-radius:16px;font-size:13px;cursor:pointer;margin:2px;color:#283593;border:1px solid transparent}
 .rh:hover{background:#e8eaf6}
-.rh.cur{background:#3949ab;color:#fff;font-weight:600}
 .tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;margin-left:5px;vertical-align:middle}
 .sec{font-size:12px;color:#888;margin:8px 0 3px}
 .fin{background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;margin-bottom:5px;overflow:hidden}
@@ -59,12 +58,10 @@ body{font-family:-apple-system,'Hiragino Sans SC','Noto Sans SC',sans-serif;back
 <div class="ft">潮州/揭阳口音 · 多音文读优先 · 10,055字</div>
 
 <script>
-function RD() { return document.getElementById('a').value === 'cz' ? _RD_CZ : _RD_JY; }
-
 function go() {
     var q=document.getElementById('q').value.trim(); if(!q)return;
     var mode=document.getElementById('m').value;
-    var e=_CL[q]; if(!e){document.getElementById('rhyBar').style.display='none';showRes('<div class=\"empty\"><div class=\"bi\">🔍</div><p>未查到「'+q+'」</p></div>');return;}
+    var e=_CL[q]; if(!e){document.getElementById('rhyBar').style.display='none';showRes('<div class="empty"><div class="bi">🔍</div><p>未查到「'+q+'」</p></div>');return;}
     if(mode==='p'){document.getElementById('rhyBar').style.display='none';showRhyme(e.r);}
     else {
         var groups=[]; for(var g in _CG){if(_CG[g].indexOf(e.r)>=0)groups.push(g);}
@@ -74,7 +71,7 @@ function go() {
         for(var gi=0;gi<groups.length;gi++){
             var g=groups[gi],rl=_CG[g];html+='<div style="font-size:12px;font-weight:600;color:#555;margin:5px 0 2px">'+g+'</div>';
             for(var ri=0;ri<rl.length;ri++){
-                var r=rl[ri],rd=RD();if(!rd[r])continue;
+                var r=rl[ri],rd=(document.getElementById('a').value==='cz'?_RD_CZ:_RD_JY);if(!rd[r])continue;
                 var has=false;for(var f in rd[r]){if(rd[r][f].in.indexOf(q)>=0){has=true;break;}}
                 html+='<span class="rh'+(has?'" style="border:2px solid #3949ab':'')+'" onclick="showRhyme(\''+r+'\')">'+r+'</span>';}}
         document.getElementById('rhyBarContent').innerHTML=html;
@@ -83,14 +80,11 @@ function go() {
         showRhyme(clGroup);
     }
 }
-
 function showRhyme(rhyme) {
     var mode=document.getElementById('m').value,accent=document.getElementById('a').value;
-    var rd;
-    if(mode==='c'){rd=accent==='cz'?_CILIN_CZ:_CILIN_JY;}else{rd=accent==='cz'?_RD_CZ:_RD_JY;}
+    var rd;if(mode==='c'){rd=accent==='cz'?_CILIN_CZ:_CILIN_JY;}else{rd=accent==='cz'?_RD_CZ:_RD_JY;}
     var d=rd[rhyme];if(!d)return;
-    var sec=mode==='c'?'词林正韵':(_SM[rhyme]||'');
-    var cilin=mode==='c'?rhyme:(_CT[rhyme]||'');
+    var sec=mode==='c'?'词林正韵':(_SM[rhyme]||'');var cilin=mode==='c'?rhyme:(_CT[rhyme]||'');
     var tc=({'上平':'#e3f2fd','下平':'#e8f5e9','上声':'#fff3e0','去声':'#fce4ec','入声':'#f3e5f5'})[sec]||'';
     var fins=Object.keys(d).sort(function(a,b){return d[b].in.length-d[a].in.length;});
     var html='<div style="font-size:18px;font-weight:700;margin-bottom:6px;padding-bottom:6px;border-bottom:2px solid #e8eaf6">';
@@ -98,8 +92,7 @@ function showRhyme(rhyme) {
     if(cilin)html+='<span class="tag" style="background:#e8f5e9;color:#2e7d32">'+cilin+'</span>';
     html+='</div><div style="font-size:12px;color:#888;margin-bottom:8px">共 '+fins.length+' 个韵母</div>';
     for(var fi=0;fi<fins.length;fi++){
-        var fin=fins[fi],info=d[fin];
-        var ins=info.in||[],outs=info.outside||[];
+        var fin=fins[fi],info=d[fin];var ins=info.in||[],outs=info.outside||[];
         var total=ins.length+outs.length,pct=total>0?(ins.length/total*100):0;
         var pc=pct>50?'#1b5e20':(pct>10?'#e65100':'#b71c1c');
         html+='<div class="fin" id="fc'+fi+'"><div class="fh" onclick="document.getElementById(\'fc'+fi+'\').classList.toggle(\'open\')">';
@@ -118,13 +111,11 @@ function showRhyme(rhyme) {
 }
 function showRes(html){document.getElementById('rc').innerHTML=html;document.getElementById('rs').style.display='block';}
 function setQ(ch){document.getElementById('q').value=ch;go();}
-
 function renderAll(){
     var tl=['上平','下平','上声','去声','入声'],ti=['↗','↘','↑','↓','▪'],tc=['#e3f2fd','#e8f5e9','#fff3e0','#fce4ec','#f3e5f5'];
     var tg={上平:[],下平:[],上声:[],去声:[],入声:[]};
-    for(var r in RD()){var s=_SM[r]||'';if(tg[s])tg[s].push(r);}
-    for(var s in tg)tg[s].sort();
-    var html='';
+    for(var r in(document.getElementById('a').value==='cz'?_RD_CZ:_RD_JY)){var s=_SM[r]||'';if(tg[s])tg[s].push(r);}
+    for(var s in tg)tg[s].sort();var html='';
     for(var i=0;i<tl.length;i++){var list=tg[tl[i]]||[];if(!list.length)continue;
         html+='<div class="sec">'+ti[i]+' '+tl[i]+'</div><div style="display:flex;flex-wrap:wrap;gap:4px">';
         for(var ri=0;ri<list.length;ri++){html+='<span class="rh" style="background:'+tc[i]+'!important;color:#333;font-weight:600" onclick="showRhyme(\''+list[ri]+'\')">'+list[ri]+'</span>';}
