@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>潮汕音填词押韵查询</title>
+<script src="data.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Hiragino Sans SC','Noto Sans SC',sans-serif;background:#f0f2f5;color:#333;max-width:960px;margin:0 auto;padding:12px}
+.hd{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;padding:20px;border-radius:12px;margin-bottom:12px}
+.hd h1{font-size:20px}.hd p{font-size:13px;opacity:.8;margin-top:2px}
+.cd{background:#fff;border-radius:10px;padding:14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.sr{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sr input{flex:1;min-width:100px;padding:9px 12px;font-size:15px;border:2px solid #d0d0d0;border-radius:8px;outline:none}
+.sr input:focus{border-color:#3949ab}
+.sr select{padding:9px 10px;font-size:14px;border:2px solid #d0d0d0;border-radius:8px;background:#fff}
+.sr button{padding:9px 20px;background:#3949ab;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600}
+.sr button:hover{background:#283593}
+.rh{display:inline-block;padding:3px 10px;border-radius:16px;font-size:13px;cursor:pointer;margin:2px;color:#283593;border:1px solid transparent}
+.rh:hover{background:#e8eaf6}
+.rh.cur{background:#3949ab;color:#fff;font-weight:600}
+.tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;margin-left:5px;vertical-align:middle}
+.sec{font-size:12px;color:#888;margin:8px 0 3px}
+.fin{background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;margin-bottom:5px;overflow:hidden}
+.fh{padding:8px 12px;background:#f5f5f5;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.fh:hover{background:#eee}
+.fb{padding:8px 12px;display:none}
+.fin.open .fb{display:block}
+.cg{margin-bottom:6px}
+.cgl{font-size:12px;color:#777;margin-bottom:3px}
+.ct{display:inline-block;padding:1px 5px;margin:1px;border-radius:3px;font-size:14px;cursor:pointer}
+.ct:hover{opacity:.8}
+.g{background:#c8e6c9;color:#1b5e20}
+.r{background:#ffcdd2;color:#b71c1c}
+.cnt{font-size:12px;color:#999}
+.empty{text-align:center;padding:30px;color:#aaa}.empty .bi{font-size:40px}
+.ft{text-align:center;padding:16px;color:#999;font-size:11px}
+</style>
+</head>
+<body>
+<div class="hd">
+<h1>🔬 潮汕音填词押韵查询</h1>
+<p>输入一字 → 定位古韵 → 查看潮汕音押韵范围</p>
+</div>
+
+<div class="cd">
+<div class="sr">
+<input type="text" id="q" placeholder="输入汉字，如「村」「东」「月」…" maxlength="2">
+<select id="m"><option value="p">平水韵</option><option value="c">词林正韵</option></select>
+<select id="a"><option value="cz">潮州口音</option><option value="jy">揭阳口音</option></select>
+<button onclick="go()">查询</button>
+</div>
+</div>
+
+<div class="cd" id="rhyBar" style="display:none"><div id="rhyBarContent"></div></div>
+<div class="cd" id="bw"><div style="font-size:13px;color:#666;margin-bottom:4px">📖 浏览韵部：</div><div id="allRhy"></div></div>
+<div class="cd" id="rs" style="display:none"><div id="rc"></div></div>
+<div class="ft">潮州/揭阳口音 · 多音文读优先 · 10,055字</div>
+
+<script>
+function RD() { return document.getElementById('a').value === 'cz' ? _RD_CZ : _RD_JY; }
+
+function go() {
+    var q=document.getElementById('q').value.trim(); if(!q)return;
+    var mode=document.getElementById('m').value;
+    var e=_CL[q]; if(!e){document.getElementById('rhyBar').style.display='none';showRes('<div class=\"empty\"><div class=\"bi\">🔍</div><p>未查到「'+q+'」</p></div>');return;}
+    if(mode==='p'){document.getElementById('rhyBar').style.display='none';showRhyme(e.r);}
+    else {
+        var groups=[]; for(var g in _CG){if(_CG[g].indexOf(e.r)>=0)groups.push(g);}
+        if(groups.length===0){document.getElementById('rhyBar').style.display='none';showRhyme(e.r);return;}
+        var clGroup=groups[0];
+        var html='<div style="font-weight:600;font-size:14px;margin-bottom:4px">【'+q+'】词林正韵：</div>';
+        for(var gi=0;gi<groups.length;gi++){
+            var g=groups[gi],rl=_CG[g];html+='<div style="font-size:12px;font-weight:600;color:#555;margin:5px 0 2px">'+g+'</div>';
+            for(var ri=0;ri<rl.length;ri++){
+                var r=rl[ri],rd=RD();if(!rd[r])continue;
+                var has=false;for(var f in rd[r]){if(rd[r][f].in.indexOf(q)>=0){has=true;break;}}
+                html+='<span class="rh'+(has?'" style="border:2px solid #3949ab':'')+'" onclick="showRhyme(\''+r+'\')">'+r+'</span>';}}
+        document.getElementById('rhyBarContent').innerHTML=html;
+        document.getElementById('rhyBar').style.display='block';
+        document.getElementById('rs').style.display='block';
+        showRhyme(clGroup);
+    }
+}
+
+function showRhyme(rhyme) {
+    var mode=document.getElementById('m').value,accent=document.getElementById('a').value;
+    var rd;
+    if(mode==='c'){rd=accent==='cz'?_CILIN_CZ:_CILIN_JY;}else{rd=accent==='cz'?_RD_CZ:_RD_JY;}
+    var d=rd[rhyme];if(!d)return;
+    var sec=mode==='c'?'词林正韵':(_SM[rhyme]||'');
+    var cilin=mode==='c'?rhyme:(_CT[rhyme]||'');
+    var tc=({'上平':'#e3f2fd','下平':'#e8f5e9','上声':'#fff3e0','去声':'#fce4ec','入声':'#f3e5f5'})[sec]||'';
+    var fins=Object.keys(d).sort(function(a,b){return d[b].in.length-d[a].in.length;});
+    var html='<div style="font-size:18px;font-weight:700;margin-bottom:6px;padding-bottom:6px;border-bottom:2px solid #e8eaf6">';
+    html+='『'+rhyme+'』<span class="tag" style="background:'+tc+'">'+sec+'</span>';
+    if(cilin)html+='<span class="tag" style="background:#e8f5e9;color:#2e7d32">'+cilin+'</span>';
+    html+='</div><div style="font-size:12px;color:#888;margin-bottom:8px">共 '+fins.length+' 个韵母</div>';
+    for(var fi=0;fi<fins.length;fi++){
+        var fin=fins[fi],info=d[fin];
+        var ins=info.in||[],outs=info.outside||[];
+        var total=ins.length+outs.length,pct=total>0?(ins.length/total*100):0;
+        var pc=pct>50?'#1b5e20':(pct>10?'#e65100':'#b71c1c');
+        html+='<div class="fin" id="fc'+fi+'"><div class="fh" onclick="document.getElementById(\'fc'+fi+'\').classList.toggle(\'open\')">';
+        html+='<span style="color:'+pc+';font-family:monospace;font-size:15px">/'+fin+'/</span>';
+        html+='<span><span class="cnt">本韵'+ins.length+'字 · 别韵'+outs.length+'字 · '+Math.round(pct)+'%</span><span style="margin-left:6px">▾</span></span></div>';
+        html+='<div class="fb"><div class="cg"><div class="cgl">✅ 归此韵（可放心用）</div>';
+        for(var ci=0;ci<ins.length;ci++){html+='<span class="ct g" onclick="setQ(\''+ins[ci]+'\')">'+ins[ci]+'</span>';}
+        html+='</div>';
+        if(outs.length>0){
+            html+='<div class="cg"><div class="cgl">⚠️ 同音不归此韵（勿混入）</div>';
+            for(var ci=0;ci<outs.length;ci++){html+='<span class="ct r" onclick="setQ(\''+outs[ci]+'\')">'+outs[ci]+'</span>';}
+            html+='</div>';}
+        html+='</div></div>';
+    }
+    showRes(html);
+}
+function showRes(html){document.getElementById('rc').innerHTML=html;document.getElementById('rs').style.display='block';}
+function setQ(ch){document.getElementById('q').value=ch;go();}
+
+function renderAll(){
+    var tl=['上平','下平','上声','去声','入声'],ti=['↗','↘','↑','↓','▪'],tc=['#e3f2fd','#e8f5e9','#fff3e0','#fce4ec','#f3e5f5'];
+    var tg={上平:[],下平:[],上声:[],去声:[],入声:[]};
+    for(var r in RD()){var s=_SM[r]||'';if(tg[s])tg[s].push(r);}
+    for(var s in tg)tg[s].sort();
+    var html='';
+    for(var i=0;i<tl.length;i++){var list=tg[tl[i]]||[];if(!list.length)continue;
+        html+='<div class="sec">'+ti[i]+' '+tl[i]+'</div><div style="display:flex;flex-wrap:wrap;gap:4px">';
+        for(var ri=0;ri<list.length;ri++){html+='<span class="rh" style="background:'+tc[i]+'!important;color:#333;font-weight:600" onclick="showRhyme(\''+list[ri]+'\')">'+list[ri]+'</span>';}
+        html+='</div>';}
+    document.getElementById('allRhy').innerHTML=html;
+}
+document.getElementById('a').addEventListener('change',function(){renderAll();});
+document.getElementById('q').addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+renderAll();
+</script>
+</body>
+</html>
