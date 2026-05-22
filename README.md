@@ -223,19 +223,26 @@ pip install pyyaml requests
 # 创建原始数据目录
 mkdir -p raw
 
-# 1.1 平水韵 + 词林正韵（charlesix59/chinese_word_rhyme）
-# 通过 jsDelivr CDN 下载
+# ── 平水韵 106 韵 ──
+# 来源：charlesix59/chinese_word_rhyme（CC-BY）
 curl -sL "https://cdn.jsdelivr.net/gh/charlesix59/chinese_word_rhyme@main/data/Pingshui_Rhyme.json" -o raw/Pingshui_Rhyme.json
+
+# ── 词林正韵 19 部 ──
+# 来源：charlesix59/chinese_word_rhyme（CC-BY）
 curl -sL "https://cdn.jsdelivr.net/gh/charlesix59/chinese_word_rhyme@main/data/Cilin_Rhyme.json" -o raw/Cilin_Rhyme.json
 
-# 1.2 潮汕音 P0（teochew-lexicon）
+# ── 潮汕音 P0：teochew-lexicon（CC-BY-SA 4.0）──
 curl -sL "https://cdn.jsdelivr.net/gh/hokkien-writing/teochew-lexicon@main/character.csv" -o raw/teochew_characters.csv
 
-# 1.3 潮汕音 P1（dieghv 字典，从 kahaani/dieghv 获取）
-# 你可以使用仓库中的 entries.yml（如果已有）
-# 或从原始仓库下载
+# ── 潮汕音 P2：kahaani/dieghv 潮州口音（CC-BY-SA 4.0）──
 curl -sL "https://raw.githubusercontent.com/kahaani/dieghv/master/dieziu.dict.yaml" -o raw/dieziu.dict.yaml
+
+# ── 潮汕音 P2：kahaani/dieghv 揭阳口音（CC-BY-SA 4.0）──
 curl -sL "https://raw.githubusercontent.com/kahaani/dieghv/master/gekion.dict.yaml" -o raw/gekion.dict.yaml
+
+# ── 潮汕音 P1：dieghv 字典（CC-BY-SA 4.0）──
+# 不含 entries.yml，需要从 hokkien-writing/dataset 获取
+# 或直接使用仓库中的 data/entries_parsed.json（如果已有）
 ```
 
 ### 步骤 2：生成古韵→韵母对照表
@@ -447,13 +454,13 @@ PUJ_FINAL_TO_PSY = {
 
 ## 数据来源
 
-| 数据 | 来源 | 说明 | 许可证 |
-|------|------|------|--------|
-| 平水韵 106 韵 | [charlesix59/chinese_word_rhyme](https://github.com/charlesix59/chinese_word_rhyme) | Pingshui_Rhyme.json | CC-BY |
-| 词林正韵 19 部 | [charlesix59/chinese_word_rhyme](https://github.com/charlesix59/chinese_word_rhyme) | Cilin_Rhyme.json | CC-BY |
-| 潮汕音 P0 | [hokkien-writing/teochew-lexicon](https://github.com/hokkien-writing/teochew-lexicon) | character.csv | CC-BY-SA 4.0 |
-| 潮汕音 P1 | [hokkien-writing/dataset](https://github.com/hokkien-writing/dataset) | entries.yml（dieghv 字典） | CC-BY-SA 4.0 |
-| 潮汕音 P2 | [kahaani/dieghv](https://github.com/kahaani/dieghv) | dieziu.dict.yaml / gekion.dict.yaml | CC-BY-SA 4.0 |
+| 数据 | 来源 | 直接下载 | 说明 | 许可证 |
+|------|------|---------|------|--------|
+| 平水韵 106 韵 | [charlesix59/chinese_word_rhyme](https://github.com/charlesix59/chinese_word_rhyme) | [⬇️ Pingshui_Rhyme.json](https://cdn.jsdelivr.net/gh/charlesix59/chinese_word_rhyme@main/data/Pingshui_Rhyme.json) | JSON 格式 | CC-BY |
+| 词林正韵 19 部 | [charlesix59/chinese_word_rhyme](https://github.com/charlesix59/chinese_word_rhyme) | [⬇️ Cilin_Rhyme.json](https://cdn.jsdelivr.net/gh/charlesix59/chinese_word_rhyme@main/data/Cilin_Rhyme.json) | JSON 格式 | CC-BY |
+| 潮汕音 P0 | [hokkien-writing/teochew-lexicon](https://github.com/hokkien-writing/teochew-lexicon) | [⬇️ character.csv](https://cdn.jsdelivr.net/gh/hokkien-writing/teochew-lexicon@main/character.csv) | CSV，6,169 字 | CC-BY-SA 4.0 |
+| 潮汕音 P1 | [hokkien-writing/dataset](https://github.com/hokkien-writing/dataset) | [⬇️ dieghv 字典 (entries.yml)](https://github.com/hokkien-writing/dataset/tree/master/external/dieghv) | YAML，~9,859 字 | CC-BY-SA 4.0 |
+| 潮汕音 P2 | [kahaani/dieghv](https://github.com/kahaani/dieghv) | [⬇️ dieziu.dict.yaml (潮州)](https://raw.githubusercontent.com/kahaani/dieghv/master/dieziu.dict.yaml) / [⬇️ gekion.dict.yaml (揭阳)](https://raw.githubusercontent.com/kahaani/dieghv/master/gekion.dict.yaml) | 口音字典，~7,500 字/口音 | CC-BY-SA 4.0 |
 
 ### 已尝试但不可用的来源
 
