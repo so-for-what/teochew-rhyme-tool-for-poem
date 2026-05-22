@@ -40,7 +40,9 @@
 
 ## 快速开始
 
-1. 用浏览器打开 [`output/index.html`](./output/index.html)（或直接双击文件）
+1. 用浏览器打开 [`output/rhyme_tool_standalone.html`](./output/rhyme_tool_standalone.html)（或直接双击文件）
+
+> 如果你想从头重建所有数据，终端运行 `python3 build_all.py` 即可。
 2. 输入一个汉字（如「村」「东」「月」）
 3. 选择「平水韵」或「词林正韵」
 4. 选择「潮州口音」或「揭阳口音」
@@ -78,18 +80,25 @@
 
 ```
 .
-├── README.md                        # 本文件
-├── output/                          # 🎯 最终交付物（直接使用）
-│   ├── index.html                   #   交互式查询工具
-│   └── data.js                      #   所有数据（JS 对象）
-├── data/                            #   CSV 中间数据
-│   ├── rhyme_by_rhyme_chaozhou.csv  #   潮州音：古韵→韵母对照
-│   └── rhyme_by_rhyme_jieyang.csv   #   揭阳音：古韵→韵母对照
-├── code/                            #   生成脚本
-│   ├── gen_rhyme_by_rhyme.py        #   从原始数据生成 CSV
-│   └── gen_tool_html.py             #   从 CSV 生成 HTML + data.js
-└── raw/                             # 📥 原始数据（需自行下载）
-    └── SEE_README                   #   见下方 "数据来源" 部分
+├── build_all.py                      # 🎯 一键构建（从原始数据到最终文件）
+├── README.md                         # 本文件
+├── raw/                              # 📥 全部原始数据（已包含，可复现）
+│   ├── Pingshui_Rhyme.json           #    平水韵 106 韵
+│   ├── Cilin_Rhyme.json              #    词林正韵 19 部
+│   ├── character.csv                 #    潮汕音 P0（teochew-lexicon）
+│   ├── entries_parsed.json           #    潮汕音 P1（含文白标注）
+│   ├── dieziu.dict.yaml              #    潮州音字典
+│   └── gekion.dict.yaml              #    揭阳音字典
+├── data/                             # 中间数据（build_all.py 生成）
+│   ├── rhyme_by_rhyme_chaozhou.csv   #    潮州音：古韵→韵母对照
+│   └── rhyme_by_rhyme_jieyang.csv    #    揭阳音：古韵→韵母对照
+├── output/                           # 🎯 最终交付物（可直接使用）
+│   ├── rhyme_tool_standalone.html    #    独立单文件（下载双击即用）
+│   ├── index.html                    #    交互页面（需 data.js）
+│   └── data.js                       #    数据文件
+└── code/                             # 分步脚本（备选）
+    ├── gen_rhyme_by_rhyme.py         #    CSV 生成脚本
+    └── gen_tool_html.py              #    HTML 生成脚本
 ```
 
 ---
@@ -474,7 +483,7 @@ PUJ_FINAL_TO_PSY = {
 
 本项目代码和整理后的数据以 **CC-BY-SA 4.0** 发布。
 
-原始数据请各自遵守其上游许可证：
+仓库 `raw/` 目录已包含全部原始数据。各上游许可证：
 
 - charlesix59/chinese_word_rhyme：CC-BY
 - kahaani/dieghv：CC-BY-SA 4.0
